@@ -42,11 +42,10 @@ public class FormatData {
                 Object currentMap = tempMap.get(name);
 
                 if (currentMap == null) {
-                    ArrayList<Object> typeArray = new ArrayList<>();
-                    // Map<String, Map<String, ArrayList<Object>>> insideMap = new HashMap<String, Map<String, ArrayList<Object>>>();
+                    ArrayList<Object> subArray = new ArrayList<>();
                     Map<String, Object> subMap = new HashMap<String, Object>();
-                    typeArray.add(item);
-                    subMap.put("sub_items", typeArray);
+                    subArray.add(item);
+                    subMap.put("sub_items", subArray);
                     subMap.put("title", name);
                     tempMap.put(name, subMap);
                     reslutArray.add(subMap);
