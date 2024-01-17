@@ -43,43 +43,36 @@ public class FormatData {
 
                 if (currentMap == null) {
                     ArrayList<Object> typeArray = new ArrayList<>();
-                    Map<String, Map<String, ArrayList<Object>>> insideMap = new HashMap<String, Map<String, ArrayList<Object>>>();
-                    Map<String, ArrayList<Object>> subMap = new HashMap<String, ArrayList<Object>>();
+                    // Map<String, Map<String, ArrayList<Object>>> insideMap = new HashMap<String, Map<String, ArrayList<Object>>>();
+                    Map<String, Object> subMap = new HashMap<String, Object>();
                     typeArray.add(item);
                     subMap.put("sub_items", typeArray);
-                    insideMap.put(name, subMap);
-                    tempMap.put(name, insideMap);
-                    reslutArray.add(insideMap);
+                    subMap.put("title", name);
+                    tempMap.put(name, subMap);
+                    reslutArray.add(subMap);
                 }
 
                 if (currentMap instanceof HashMap) {
                     @SuppressWarnings(value = "unchecked")
-                    Object subMap = ((HashMap<String, Object>) currentMap).get(name);
-                    if (subMap instanceof HashMap) {
-                        @SuppressWarnings(value = "unchecked")
-                        ArrayList<Object> subItems = ((HashMap<String, ArrayList<Object>>) subMap).get("sub_items");
-
-                        subItems.add(item);
-                    }
+                    ArrayList<Object> subItems = (ArrayList<Object>)(((HashMap<String, Object>)currentMap).get("sub_items"));
+                    subItems.add(item);
                 }
             }
         }
 
         if (nextKey != null) {
             for (Map.Entry<String, Object> entry : tempMap.entrySet()) {
-                String key = entry.getKey();
-                Object map = entry.getValue();
+                @SuppressWarnings(value = "unchecked")
+                Map<String, Object> map = (Map<String, Object>) entry.getValue();
 
                 if (map instanceof HashMap) {
-                    @SuppressWarnings(value = "unchecked")
-                    HashMap<String, Object> subMap = ((HashMap<String, HashMap<String, Object>>) map).get(key);
-                    Object items = subMap.get("sub_items");
+                    Object items = ((Map<String, Object>) map).get("sub_items");
 
                     @SuppressWarnings(value = "unchecked")
                     ArrayList<Map<String, String>> subItems = (ArrayList<Map<String, String>>) items;
 
                     if (subItems.size() > 0) {
-                        subMap.put("sub_items", convertArrayList(subItems, nextKey, keys));
+                        map.put("sub_items", convertArrayList(subItems, nextKey, keys));
                     }
                 }
             }
